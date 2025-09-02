@@ -1,4 +1,4 @@
-import { TProduct } from './types/products.type';
+import { TProduct } from "./types/products.type";
 import Link from "next/link";
 import React from "react";
 
@@ -11,8 +11,8 @@ const endPoint = "https://dummyjson.com/products";
 const Page = async ({ searchParams }: Props) => {
   const id = searchParams.id as string | undefined;
 
+  // 🔹 Jika ada ID → tampilkan detail product
   if (id) {
-    // 🔹 Ambil detail product by ID
     const response = await fetch(`${endPoint}/${id}`, {
       cache: "no-store",
     });
@@ -21,9 +21,8 @@ const Page = async ({ searchParams }: Props) => {
       return <div>Product not found</div>;
     }
 
-    const rawProduct = await response.json();
+    const rawProduct: TProduct = await response.json();
 
-    // 🔹 Ambil hanya field sesuai TProduct
     const product: TProduct = {
       id: rawProduct.id,
       title: rawProduct.title,
@@ -35,23 +34,46 @@ const Page = async ({ searchParams }: Props) => {
       stock: rawProduct.stock,
     };
 
-    // 🔹 Output dalam format JSON sesuai TProduct
     return (
-      <pre className="text-sm">
-        {JSON.stringify({ products: [product] }, null, 2)}
-      </pre>
+      <div className="p-6 space-y-3">
+        <h1 className="text-3xl font-bold">{product.title}</h1>
+        <p className="text-lg">{product.description}</p>
+        <ul className="space-y-1">
+          <li>
+            <b>Category:</b> {product.category}
+          </li>
+          <li>
+            <b>Price:</b> ${product.price}
+          </li>
+          <li>
+            <b>Discount:</b> {product.discountPercentage}%
+          </li>
+          <li>
+            <b>Rating:</b> {product.rating}
+          </li>
+          <li>
+            <b>Stock:</b> {product.stock}
+          </li>
+        </ul>
+        <Link href="/products" className="underline">
+          ← Back to products
+        </Link>
+      </div>
     );
   }
 
-  // 🔹 Kalau tidak ada id, ambil list product
+  // 🔹 Jika tidak ada ID → tampilkan list product
   const response = await fetch(endPoint, {
     cache: "no-store",
   });
 
-  const data = await response.json();
+  if (!response.ok) {
+    return <div>Failed to fetch products</div>;
+  }
 
-  // 🔹 Ambil hanya field sesuai TProduct
-  const products: TProduct[] = data.products.map((p: any) => ({
+  const data: { products: TProduct[] } = await response.json();
+
+  const products: TProduct[] = data.products.map((p) => ({
     id: p.id,
     title: p.title,
     description: p.description,
@@ -63,12 +85,15 @@ const Page = async ({ searchParams }: Props) => {
   }));
 
   return (
-    <div>
+    <div className="p-6 space-y-6">
       {products.map((product) => (
-        <div key={product.id} className="mb-4">
+        <div key={product.id} className="border-b pb-4">
           <p className="text-2xl font-semibold">{product.title}</p>
-          <p className="text-base">{product.description}</p>
-          <Link href={`/products?id=${product.id}`}>
+          <p className="text-base text-gray-600">{product.description}</p>
+          <Link
+            href={`/products?id=${product.id}`}
+            className="text-blue-600 underline"
+          >
             Goto {product.title}
           </Link>
         </div>
