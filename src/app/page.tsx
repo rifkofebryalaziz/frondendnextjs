@@ -53,7 +53,7 @@ export default function Home() {
             <div>
               <h3 className="font-semibold text-gray-800 mb-1">Catatan</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Untuk products, tersedia dua versi: menggunakan API custom yang kita buat sendiri 
+                Untuk products, tersedia dua versi: menggunakan API yang kita buat sendiri 
                 dan API external dari dummyjson/products.
               </p>
             </div>
@@ -86,7 +86,7 @@ export default function Home() {
         {/* Footer */}
         <div className="text-center mt-12 pt-8 border-t border-gray-200">
           <p className="text-gray-400 text-sm">
-            Built with Next.js & Tailwind CSS
+            Tugas Magang Neurabot 
           </p>
         </div>
       </div>

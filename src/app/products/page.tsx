@@ -55,9 +55,6 @@ const Page = async ({ searchParams }: Props) => {
             <b>Stock:</b> {product.stock}
           </li>
         </ul>
-        <Link href="/products" className="underline">
-          ← Back to products
-        </Link>
       </div>
     );
   }
